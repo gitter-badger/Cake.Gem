@@ -20,25 +20,25 @@ var isLocalBuild        = !AppVeyor.IsRunningOnAppVeyor;
 var isPullRequest       = AppVeyor.Environment.PullRequest.IsPullRequest;
 var isDevelopBranch     = AppVeyor.Environment.Repository.Branch == "develop";
 var isTag               = AppVeyor.Environment.Repository.Tag.IsTag;
-var solution            = "./Source/Cake.Tfx.sln";
-var solutionPath        = Directory("./Source/Cake.Tfx");
+var solution            = "./Source/Cake.Gem.sln";
+var solutionPath        = Directory("./Source/Cake.Gem");
 var sourcePath          = Directory("./Source");
-var binDir              = Directory("./Source/Cake.Tfx/bin") + Directory(configuration);
-var objDir              = Directory("./Source/Cake.Tfx/obj") + Directory(configuration);
+var binDir              = Directory("./Source/Cake.Gem/bin") + Directory(configuration);
+var objDir              = Directory("./Source/Cake.Gem/obj") + Directory(configuration);
 var buildArtifacts      = Directory("./BuildArtifacts");
 var testResultsDir      = buildArtifacts + Directory("test-results");
-var version             = "0.3.1";
-var semVersion          = "0.3.1";
+var version             = "0.1.0";
+var semVersion          = "0.1.0";
 
 var assemblyInfo        = new AssemblyInfoSettings {
-                                Title                   = "Cake.Tfx",
-                                Description             = "Cake Tfx AddIn",
-                                Product                 = "Cake.Tfx",
+                                Title                   = "Cake.Gem",
+                                Description             = "Cake Gem AddIn",
+                                Product                 = "Cake.Gem",
                                 Company                 = "gep13",
                                 Version                 = version,
                                 FileVersion             = version,
                                 InformationalVersion    = semVersion,
-                                Copyright               = string.Format("Copyright © gep13 {0} - Present", DateTime.Now.Year),
+                                Copyright               = string.Format("Copyright ï¿½ gep13 {0} - Present", DateTime.Now.Year),
                                 CLSCompliant            = true
                             };
 var nuGetPackSettings   = new NuGetPackSettings {
@@ -49,18 +49,18 @@ var nuGetPackSettings   = new NuGetPackSettings {
                                 Owners                  = new[] {assemblyInfo.Company},
                                 Description             = assemblyInfo.Description,
                                 Summary                 = "Cake AddIn that extends Cake with ability to transform ReSharper Reports into human readable format",
-                                ProjectUrl              = new Uri("https://github.com/gep13/Cake.Tfx/"),
-                                LicenseUrl              = new Uri("https://github.com/gep13/Cake.Tfx/blob/master/LICENSE"),
+                                ProjectUrl              = new Uri("https://github.com/gep13/Cake.Gem/"),
+                                LicenseUrl              = new Uri("https://github.com/gep13/Cake.Gem/blob/master/LICENSE"),
                                 Copyright               = assemblyInfo.Copyright,
-                                ReleaseNotes            = new List<string>() { "https://github.com/gep13/Cake.Tfx/releases" },
-                                Tags                    = new [] {"Cake", "Script", "Build", "Tfx"},
+                                ReleaseNotes            = new List<string>() { "https://github.com/gep13/Cake.Gem/releases" },
+                                Tags                    = new [] {"Cake", "Script", "Build", "Gem"},
                                 RequireLicenseAcceptance= false,
                                 Symbols                 = false,
                                 NoPackageAnalysis       = true,
                                 Files                   = new [] {
-                                                                    new NuSpecContent {Source = "Cake.Tfx.dll"},
-                                                                    new NuSpecContent {Source = "Cake.Tfx.pdb"},
-                                                                    new NuSpecContent {Source = "Cake.Tfx.xml"}
+                                                                    new NuSpecContent {Source = "Cake.Gem.dll"},
+                                                                    new NuSpecContent {Source = "Cake.Gem.pdb"},
+                                                                    new NuSpecContent {Source = "Cake.Gem.xml"}
                                                                  },
                                 BasePath                = binDir,
                                 OutputDirectory         = buildArtifacts
@@ -160,7 +160,7 @@ Task("InspectCode")
     // Run ReSharper's InspectCode
     InspectCode(solution, new InspectCodeSettings() {
       SolutionWideAnalysis = true,
-	  Profile = sourcePath + File("Cake.Tfx.sln.DotSettings"),
+	  Profile = sourcePath + File("Cake.Gem.sln.DotSettings"),
       OutputFile = buildArtifacts + File("_ReSharperReports/inspectcode.xml"),
       });
 });
@@ -223,7 +223,7 @@ Task("Publish-Nuget-Package")
     }
 
     // Get the path to the package.
-    var package = buildArtifacts + File("./Cake.Tfx." + semVersion + ".nupkg");
+    var package = buildArtifacts + File("./Cake.Gem." + semVersion + ".nupkg");
 
     // Push the package.
     NuGetPush(package, new NuGetPushSettings {
